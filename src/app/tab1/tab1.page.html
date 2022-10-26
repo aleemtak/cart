@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-searchbar
+      mode="ios"
+      style="padding: 8px"
+      animated="true"
+      (ionChange)="onSearchTextChanged($event)"
+      (ionClear)="onSearchCancel($event)"
+    ></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-icon
+        color="danger"
+        size="large"
+        (click)="notification()"
+        name="notifications-outline"
+      ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides
+    pager="true"
+    [options]="slideOpts"
+    *ngIf="bannerImages && bannerImages.length"
+  >
+    <ion-slide *ngFor="let image of bannerImages">
+      <img [src]="image?.imgurl || 'assets/imgs/divisions.svg'" />
+    </ion-slide>
+  </ion-slides>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-between ion-padding-vertical">
+      <!-- <ion-col size="4">
+        <div class="font-bold">Flash Sale</div>
+      </ion-col> -->
+      <ion-col>
+        <div class="full-gray-border">
+          <ion-select
+            placeholder="Select category"
+            (ionChange)="sort($event)"
+            okText="Select"
+            cancelText="Dismiss"
+            mode="md"
+          >
+            <ion-select-option value="bags">Bags</ion-select-option>
+            <ion-select-option value="electronics"
+              >Electronics</ion-select-option
+            >
+            <ion-select-option value="shoes">Shoes</ion-select-option>
+            <ion-select-option value="all">All</ion-select-option>
+          </ion-select>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col
+        size="6"
+        size-lg="3"
+        size-md="4"
+        *ngFor="let product of filteredProducts"
+      >
+        <ion-card class="ion-no-margin">
+          <img
+            width="300px"
+            height="100px"
+            [src]="product?.imgurl || 'assets/imgs/divisions.svg'"
+          />
+          <ion-card-header>
+            <ion-card-subtitle>{{ product?.category }}</ion-card-subtitle>
+            <ion-card-title class="font-size-1"
+              >{{ product?.name }}</ion-card-title
+            >
+          </ion-card-header>
+          <ion-card-content>
+            <div class="ion-color-dark">
+              {{ product?.price | currency: 'INR' }}
+            </div>
+            <div class="cart-button">
+              <ion-button
+                color="tertiary"
+                size="small"
+                (click)="addToCartModal(product)"
+              >
+                <ion-icon
+                  style="padding-right: 5px"
+                  size="medium"
+                  name="cart-outline"
+                ></ion-icon>
+                {{ cart.isAddedToCart(product?.id) ? 'Goto Cart' : 'Add to cart'
+                }}
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
